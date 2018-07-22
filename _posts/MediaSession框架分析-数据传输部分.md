@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      MediaSession框架分析-数据传输部分
-subtitle:   
+subtitle:   大部分以Android8.0分析MediaSession框架的数据传输部分
 date:       2018-07-22
 author:     hry
 header-img: img/post-bg-android.jpg
