@@ -10,11 +10,10 @@ tags:
     - MediaSession
 ---
 
-
 ### 简单使用
-1. 官方文档：https://developer.android.google.cn/guide/topics/media-apps/audio-app/building-an-audio-app"
-2. 第三方介绍：https://juejin.im/post/5aa0e18851882577b45e91df"
-3. 官方通用音乐播放器示例：https://github.com/googlesamples/android-UniversalMusicPlayer"
+1. [官方文档](https://developer.android.google.cn/guide/topics/media-apps/audio-app/building-an-audio-app)
+2. [第三方介绍](https://juejin.im/post/5aa0e18851882577b45e91df)
+3. [官方通用音乐播放器示例](https://github.com/googlesamples/android-UniversalMusicPlayer)
 
 ***
 ## 大部分以Android8.0分析MediaSession框架
@@ -59,25 +58,26 @@ tags:
         return null;
     }
 
-####　MediaBrowser．MediaServiceConnection，bindService成功后，调用mServiceBinder.connect()请求连接
-    // Save their binder
-                    mServiceBinder = IMediaBrowserService.Stub.asInterface(binder);
-
-                    // We make a new mServiceCallbacks each time we connect so that we can drop
-                    // responses from previous connections.
-                    mServiceCallbacks = getNewServiceCallbacks();
-                    mState = CONNECT_STATE_CONNECTING;
-
-                    // Call connect, which is async. When we get a response from that we will
-                    // say that we're connected.
-                    try {
-                        if (DBG) {
-                            Log.d(TAG, "ServiceCallbacks.onConnect...");
-                            dump();
-                        }
-                        mServiceBinder.connect(mContext.getPackageName(), mRootHints,
-                                mServiceCallbacks);
-                    } 
+#### MediaBrowser．MediaServiceConnection，bindService成功后，调用mServiceBinder.connect()请求连接
+   					
+     // Save their binder
+    mServiceBinder = IMediaBrowserService.Stub.asInterface(binder);
+    
+    // We make a new mServiceCallbacks each time we connect so that we can drop
+    // responses from previous connections.
+    mServiceCallbacks = getNewServiceCallbacks();
+    mState = CONNECT_STATE_CONNECTING;
+    
+    // Call connect, which is async. When we get a response from that we will
+    // say that we're connected.
+    try {
+    if (DBG) {
+    Log.d(TAG, "ServiceCallbacks.onConnect...");
+    dump();
+    }
+    mServiceBinder.connect(mContext.getPackageName(), mRootHints,
+    mServiceCallbacks);
+    } 
 
 
 
@@ -156,7 +156,7 @@ tags:
 
 ### 获取数据的过程
 
-### Activity或者Fragment,连接service成功后
+#### Activity或者Fragment,连接service成功后
     
 	mMediaBrowser.unsubscribe(parentId);
   	mBrowser.subscribe(parentId, options, callback)
@@ -314,5 +314,5 @@ tags:
         });
     }
 
-***
+    
 
