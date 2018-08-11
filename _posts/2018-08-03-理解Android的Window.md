@@ -307,6 +307,7 @@ ViewRootImpl是Framework层与Native层的通信桥梁，它的构造函数如�
             pokeDrawLockIfNeeded();
         }
     }
+
 mChoreographer是Choreographer类，关于编舞者Choreographer可以看这篇文章[Android系统的编舞者Choreographer](https://blog.csdn.net/stven_king/article/details/80098845),最后会执行performTraversals()方法。
 
 	private void performTraversals() {
@@ -404,6 +405,7 @@ WindowManagerGlobal的removeView方法如下，
         mHandler.sendEmptyMessage(MSG_DIE);
         return true;
     }
+
 不管immediate是什么值，最后都会调doDie方法，只是异步删除时，ViewRootImpl的Handler会处理此消息并调用doDie方法，该方法代码如下
 	
 	void doDie() {
