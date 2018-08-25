@@ -81,6 +81,7 @@ tags:
 
 5. MediaBrowserService.ServiceBinder,会回调Service的onGetRoot()方法，如果为null，连接失败
 
+
     	@Override
         public void connect(final String pkg, final Bundle rootHints,
                 final IMediaBrowserServiceCallbacks callbacks) {
