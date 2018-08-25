@@ -81,58 +81,56 @@ tags:
 
 5. MediaBrowserService.ServiceBinder,会回调Service的onGetRoot()方法，如果为null，连接失败
 
-
-    	@Override
-        public void connect(final String pkg, final Bundle rootHints,
-                final IMediaBrowserServiceCallbacks callbacks) {
-
-            final int uid = Binder.getCallingUid();
-            if (!isValidPackage(pkg, uid)) {
-                throw new IllegalArgumentException("Package/uid mismatch: uid=" + uid
-                        + " package=" + pkg);
-            }
-
-            mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        final IBinder b = callbacks.asBinder();
-
-                        // Clear out the old subscriptions. We are getting new ones.
-                        mConnections.remove(b);
-
-                        final ConnectionRecord connection = new ConnectionRecord();
-                        connection.pkg = pkg;
-                        connection.rootHints = rootHints;
-                        connection.callbacks = callbacks;
-
-                        connection.root = MediaBrowserService.this.onGetRoot(pkg, uid, rootHints);
-
-                        // If they didn't return something, don't allow this client.
-                        if (connection.root == null) {
-                            Log.i(TAG, "No root for client " + pkg + " from service "
-                                    + getClass().getName());
-                            try {
-                                callbacks.onConnectFailed();
-                            } catch (RemoteException ex) {
-                                Log.w(TAG, "Calling onConnectFailed() failed. Ignoring. "
-                                        + "pkg=" + pkg);
-                            }
-                        } else {
-                            try {
-                                mConnections.put(b, connection);
-                                if (mSession != null) {
-                                    callbacks.onConnect(connection.root.getRootId(),
-                                            mSession, connection.root.getExtras());
-                                }
-                            } catch (RemoteException ex) {
-                                Log.w(TAG, "Calling onConnect() failed. Dropping client. "
-                                        + "pkg=" + pkg);
-                                mConnections.remove(b);
-                            }
-                        }
-                    }
-                });
-        }
+	    public void connect(final String pkg, final Bundle rootHints,
+	            final IMediaBrowserServiceCallbacks callbacks) {
+	
+	        final int uid = Binder.getCallingUid();
+	        if (!isValidPackage(pkg, uid)) {
+	            throw new IllegalArgumentException("Package/uid mismatch: uid=" + uid
+	                    + " package=" + pkg);
+	        }
+	
+	        mHandler.post(new Runnable() {
+	                @Override
+	                public void run() {
+	                    final IBinder b = callbacks.asBinder();
+	
+	                    // Clear out the old subscriptions. We are getting new ones.
+	                    mConnections.remove(b);
+	
+	                    final ConnectionRecord connection = new ConnectionRecord();
+	                    connection.pkg = pkg;
+	                    connection.rootHints = rootHints;
+	                    connection.callbacks = callbacks;
+	
+	                    connection.root = MediaBrowserService.this.onGetRoot(pkg, uid, rootHints);
+	
+	                    // If they didn't return something, don't allow this client.
+	                    if (connection.root == null) {
+	                        Log.i(TAG, "No root for client " + pkg + " from service "
+	                                + getClass().getName());
+	                        try {
+	                            callbacks.onConnectFailed();
+	                        } catch (RemoteException ex) {
+	                            Log.w(TAG, "Calling onConnectFailed() failed. Ignoring. "
+	                                    + "pkg=" + pkg);
+	                        }
+	                    } else {
+	                        try {
+	                            mConnections.put(b, connection);
+	                            if (mSession != null) {
+	                                callbacks.onConnect(connection.root.getRootId(),
+	                                        mSession, connection.root.getExtras());
+	                            }
+	                        } catch (RemoteException ex) {
+	                            Log.w(TAG, "Calling onConnect() failed. Dropping client. "
+	                                    + "pkg=" + pkg);
+	                            mConnections.remove(b);
+	                        }
+	                    }
+	                }
+	            });
+	    }
 
 6. Service.onGetRoot()，要允许客户端连接到您的服务并浏览其媒体内容，onGetRoot（）必须返回一个非空BrowserRoot，它是一个表示您的内容层次结构的根ID。
 
