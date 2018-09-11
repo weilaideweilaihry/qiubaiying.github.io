@@ -123,6 +123,7 @@ addView真正的实现是在WindowManagerGlobal的addView方法，代码如下
 
 ViewRootImpl是Framework层与Native层的通信桥梁，它的构造函数如下：
 
+
  	public ViewRootImpl(Context context, Display display) {
         mContext = context;
 
