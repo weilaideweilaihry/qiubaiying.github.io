@@ -124,56 +124,56 @@ addView真正的实现是在WindowManagerGlobal的addView方法，代码如下
 ViewRootImpl是Framework层与Native层的通信桥梁，它的构造函数如下：
 
 
- 	public ViewRootImpl(Context context, Display display) {
-        mContext = context;
-
-	//1 获取IWindowSession，用来和WindowManagerService建立连接
-        mWindowSession = WindowManagerGlobal.getWindowSession();
-
-        mDisplay = display;
-        mBasePackageName = context.getBasePackageName();
+	 public ViewRootImpl(Context context, Display display) {
+	        mContext = context;
 	
-	//2 保存当前线程，更新UI的线程只能是在创建ViewRootImpl时的线程，否则会抛出异常
-        mThread = Thread.currentThread();
-
-        mLocation = new WindowLeaked(null);
-        mLocation.fillInStackTrace();
-        mWidth = -1;
-        mHeight = -1;
-        mDirty = new Rect();
-        mTempRect = new Rect();
-        mVisRect = new Rect();
-        mWinFrame = new Rect();
-        mWindow = new W(this);
-        mTargetSdkVersion = context.getApplicationInfo().targetSdkVersion;
-        mViewVisibility = View.GONE;
-        mTransparentRegion = new Region();
-        mPreviousTransparentRegion = new Region();
-        mFirst = true; // true for the first time the view is added
-        mAdded = false;
-        mAttachInfo = new View.AttachInfo(mWindowSession, mWindow, display, this, mHandler, this,
-                context);
-        mAccessibilityManager = AccessibilityManager.getInstance(context);
-        mAccessibilityManager.addAccessibilityStateChangeListener(
-                mAccessibilityInteractionConnectionManager, mHandler);
-        mHighContrastTextManager = new HighContrastTextManager();
-        mAccessibilityManager.addHighTextContrastStateChangeListener(
-                mHighContrastTextManager, mHandler);
-        mViewConfiguration = ViewConfiguration.get(context);
-        mDensity = context.getResources().getDisplayMetrics().densityDpi;
-        mNoncompatDensity = context.getResources().getDisplayMetrics().noncompatDensityDpi;
-        mFallbackEventHandler = new PhoneFallbackEventHandler(context);
-        mChoreographer = Choreographer.getInstance();
-        mDisplayManager = (DisplayManager)context.getSystemService(Context.DISPLAY_SERVICE);
-
-        if (!sCompatibilityDone) {
-            sAlwaysAssignFocus = true;
-
-            sCompatibilityDone = true;
-        }
-
-        loadSystemProperties();
-    }
+		//1 获取IWindowSession，用来和WindowManagerService建立连接
+	        mWindowSession = WindowManagerGlobal.getWindowSession();
+	
+	        mDisplay = display;
+	        mBasePackageName = context.getBasePackageName();
+		
+		//2 保存当前线程，更新UI的线程只能是在创建ViewRootImpl时的线程，否则会抛出异常
+	        mThread = Thread.currentThread();
+	
+	        mLocation = new WindowLeaked(null);
+	        mLocation.fillInStackTrace();
+	        mWidth = -1;
+	        mHeight = -1;
+	        mDirty = new Rect();
+	        mTempRect = new Rect();
+	        mVisRect = new Rect();
+	        mWinFrame = new Rect();
+	        mWindow = new W(this);
+	        mTargetSdkVersion = context.getApplicationInfo().targetSdkVersion;
+	        mViewVisibility = View.GONE;
+	        mTransparentRegion = new Region();
+	        mPreviousTransparentRegion = new Region();
+	        mFirst = true; // true for the first time the view is added
+	        mAdded = false;
+	        mAttachInfo = new View.AttachInfo(mWindowSession, mWindow, display, this, mHandler, this,
+	                context);
+	        mAccessibilityManager = AccessibilityManager.getInstance(context);
+	        mAccessibilityManager.addAccessibilityStateChangeListener(
+	                mAccessibilityInteractionConnectionManager, mHandler);
+	        mHighContrastTextManager = new HighContrastTextManager();
+	        mAccessibilityManager.addHighTextContrastStateChangeListener(
+	                mHighContrastTextManager, mHandler);
+	        mViewConfiguration = ViewConfiguration.get(context);
+	        mDensity = context.getResources().getDisplayMetrics().densityDpi;
+	        mNoncompatDensity = context.getResources().getDisplayMetrics().noncompatDensityDpi;
+	        mFallbackEventHandler = new PhoneFallbackEventHandler(context);
+	        mChoreographer = Choreographer.getInstance();
+	        mDisplayManager = (DisplayManager)context.getSystemService(Context.DISPLAY_SERVICE);
+	
+	        if (!sCompatibilityDone) {
+	            sAlwaysAssignFocus = true;
+	
+	            sCompatibilityDone = true;
+	        }
+	
+	        loadSystemProperties();
+	    }
 
 1处 获取IWindowSession的WindowManagerGlobal类的getWindowSession方法代码如下： 
 	
