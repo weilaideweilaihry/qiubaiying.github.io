@@ -25,20 +25,20 @@ tags:
 	    bundle); // optional Bundle
 	    mMediaBrowser.connect();
 
-2. MediaBrowser,真正调用对象
+2. MediaBrowser,真正调用对象（android.media.browse.MediaBrowser#connect部分代码如下）
 
-	      final Intent intent = new Intent(MediaBrowserService.SERVICE_INTERFACE);
-	                intent.setComponent(mServiceComponent);
-	
-	                mServiceConnection = new MediaServiceConnection();
-	
-	                boolean bound = false;
-	                try {
-	                    bound = mContext.bindService(intent, mServiceConnection,
-	                            Context.BIND_AUTO_CREATE);
-	                } catch (Exception ex) {
-	                    Log.e(TAG, "Failed binding to service " + mServiceComponent);
-	                }
+	    final Intent intent = new Intent(MediaBrowserService.SERVICE_INTERFACE);
+        intent.setComponent(mServiceComponent);
+
+        mServiceConnection = new MediaServiceConnection();
+
+        boolean bound = false;
+        try {
+            bound = mContext.bindService(intent, mServiceConnection,
+                    Context.BIND_AUTO_CREATE);
+        } catch (Exception ex) {
+            Log.e(TAG, "Failed binding to service " + mServiceComponent);
+        }
 	
 3. MediaBrowserService，Service真正回调的对象，返回ServiceBinder对象
 
@@ -56,7 +56,7 @@ tags:
 	        return null;
 	    }
 
-4. MediaBrowser．MediaServiceConnection，bindService成功后，调用mServiceBinder.connect()请求连接
+4. MediaBrowser．MediaServiceConnection，bindService成功后，调用mServiceBinder.connect()请求连接（android.media.browse.MediaBrowser.MediaServiceConnection#onServiceConnected部分代码如下）
    					
 	     // Save their binder
 	    mServiceBinder = IMediaBrowserService.Stub.asInterface(binder);
@@ -79,7 +79,7 @@ tags:
 
 
 
-5. MediaBrowserService.ServiceBinder,会回调Service的onGetRoot()方法，如果为null，连接失败
+5. MediaBrowserService.ServiceBinder,会回调Service的onGetRoot()方法，如果为null，连接失败（android.service.media.MediaBrowserService.ServiceBinder#connect部分代码如下）
 
 	    public void connect(final String pkg, final Bundle rootHints,
 	            final IMediaBrowserServiceCallbacks callbacks) {
@@ -160,7 +160,7 @@ tags:
 	  	mBrowser.subscribe(parentId, options, callback)
 
 
-2. MediaBrowser 调用mServiceBinder.addSubscription(parentId, callback.mToken, options,mServiceCallbacks);
+2. android.media.browse.MediaBrowser#subscribeInternal代码如下，最后MediaBrowser会调用mServiceBinder.addSubscription(parentId, callback.mToken, options,mServiceCallbacks);
     
 	    private void subscribeInternal(String parentId, Bundle options, SubscriptionCallback callback) {
 	        // Check arguments.
@@ -195,7 +195,7 @@ tags:
 	        }
 	    }
  
-3. MediaBrowserService，最后会调用Service的onLoadChildren方法，Result的sendResult方法又会回调onResultSent方法，最后结果回调回去
+3. MediaBrowserService，最后会调用Service的onLoadChildren方法，Result的sendResult方法又会回调onResultSent方法，最后结果回调回去（android.service.media.MediaBrowserService#addSubscription，android.service.media.MediaBrowserService#performLoadChildren代码如下）
 
 	     /**
 	     * Save the subscription and if it is a new subscription send the results.
@@ -267,7 +267,7 @@ tags:
 	        }
 	    }
 
-4. MediaBrowser，回调给主工程
+4. MediaBrowser，回调给主工程（android.media.browse.MediaBrowser#onLoadChildren的代码如下）
 
 	        private final void onLoadChildren(final IMediaBrowserServiceCallbacks callback,
 	            final String parentId, final ParceledListSlice list, final Bundle options) {
